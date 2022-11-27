@@ -7,10 +7,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late Map Data;// Creating The Data Of Type Map To Store The Data Which Is Coming From The Loading Screen
+ Map Data={};// Creating The Data Of Type Map To Store The Data Which Is Coming From The Loading Screen
   @override
   Widget build(BuildContext context) {
-    Data=ModalRoute.of(context)?.settings.arguments as Map;//this is Accepting the Data from The LOading Screen To it
+    // Data=ModalRoute.of(context)?.settings.arguments as Map;//this is Accepting the Data from The LOading Screen To it
+    Data=Data.isNotEmpty?Data:ModalRoute.of(context)?.settings.arguments as Map;//Just Puting a Check If the Data is Emoty then Do this ONly KUki HAr bari Khulne PAr haam Vhi same Last Time Vala Chate hai
     print(Data);
     //setBackground
     String bgImage=Data['Daytime']?'Day.png':'night.jpg';
@@ -29,8 +30,20 @@ class _HomeState extends State<Home> {
             padding: const EdgeInsets.fromLTRB(0, 120, 0, 0),//To Bring It Little Bit Below
             child: Column(
               children: <Widget>[
-                TextButton.icon(onPressed: (){
-                  Navigator.pushNamed(context, '/Location');//part of routing(25/11/2022
+                TextButton.icon(onPressed: () async{// making the on pressed as Async Cause we Are Using The await keyword In front of Navigator
+                  //Navigator.pushNamed(context, '/Location');//part of routing(25/11/2022
+                dynamic result= await Navigator.pushNamed(context, '/Location');//Using it as It is A big Async task cause
+                                                                               // it takes go to next page getting the data and again
+                                                                              // coming to it and as we don't Know What is Going to Come We Are Storing it IntO the Result Which is OF Dynamic Type
+                  setState(() {
+                    //Getting and Updating data From result
+                    Data={
+                      'time': result['time'],
+                      'location': result['location'],
+                      'Daytime':result['Daytime'],
+                      'flag': result['flat']
+                    };
+                  });
                 },
                     label: Text('Edit Location',
                     style: TextStyle(

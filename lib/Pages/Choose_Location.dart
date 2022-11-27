@@ -38,17 +38,30 @@ class _ChooseLocationState extends State<ChooseLocation> {
   //    getdata();
   // }
  // }
+
 //------------------------------------------------------------------27/11/2022------------------------------------------------------------------------------------------------------------------------
 List<worldTime> locations=[
-  worldTime(Location: 'India', flat: '', url: 'Asia/Kolkata'),
-  worldTime(Location: 'London', flat: '', url: 'Europe/London'),
-  worldTime(Location: 'Athens', flat: '', url: 'Europe/Berlin'),
-  worldTime(Location: 'Cairo', flat: '', url: 'Africa/Cario'),
-  worldTime(Location: 'Nairobi', flat: '', url: 'Africa/Nairobi'),
-  worldTime(Location: 'Chicago', flat: '', url: 'America/Chicago'),
-  worldTime(Location: 'New York', flat: '', url: 'America/New_York'),
-  worldTime(Location: 'Seoul', flat: '', url: 'Asia/Seoul'),
+  worldTime(Location: 'India', flat: 'India.webp', url: 'Asia/Kolkata'),
+  worldTime(Location: 'London', flat: 'London.webp', url: 'Europe/London'),
+  worldTime(Location: 'Athens', flat: 'Berlin.png', url: 'Europe/Berlin'),
+  worldTime(Location: 'Cairo', flat: 'Cairo.svg.png', url: 'Africa/Cario'),
+  worldTime(Location: 'Nairobi', flat: 'Nairobi.webp', url: 'Africa/Nairobi'),
+  worldTime(Location: 'Chicago', flat: 'Chicago.png', url: 'America/Chicago'),
+  worldTime(Location: 'New York', flat: 'New_York.webp', url: 'America/New_York'),
+  worldTime(Location: 'Seoul', flat: 'Seoul.png', url: 'Asia/Seoul'),
 ];
+void updateTime(index) async{
+  worldTime instance =locations[index];// getting the specific Item on user click and keep that instance in Worldtime isntance
+  await instance.getTime();//wait till it is done
+  //navigating to HomeScreen
+  Navigator.pop(context,{ // we are not pushing here We Are Poping here So we will not Going to use Arguments Instead of that We just Directly pass map
+    'location': instance.Location,
+    'flag':instance.flat,
+    'time': instance.time,
+    'Daytime': instance.isdaytime,
+  });
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,10 +77,15 @@ List<worldTime> locations=[
         itemBuilder: (context,index){
     return Card(
        child: ListTile(
-         onTap: (){},//Works Some Function on the Tap OF it
+         onTap: (){
+            updateTime(index);
+         },//Works Some Function on the Tap OF it
          title: Text(
            locations[index].Location
          ),
+         leading: CircleAvatar(
+           backgroundImage: AssetImage('assistes/${locations[index].flat}'), // we will use Curli braces cause we have to use Square braces notation when We want to use . on that We use Curcli Notation
+         ) ,
        ),//Kind Of List And Infront of it have Some Image
 );
         },//Cycle Through The List And Return Widget OF Containing Elements inside that List
